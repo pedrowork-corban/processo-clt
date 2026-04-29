@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lead Score Consignado</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+  font-family:'Inter', sans-serif;
+  margin:0;
+  background:linear-gradient(135deg,#0033A0,#001f5c);
+  color:#333;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  padding:20px;
+  color:white;
+  font-weight:700;
+  font-size:22px;
+}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:20px auto;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  overflow:hidden;
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  background:#f1f3f6;
+}
+
+.tab{
+  flex:1;
+  padding:14px;
+  text-align:center;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.tab:hover{
+  background:#e6e9ef;
+}
+
+.tab.active{
+  background:#FFCC00;
+}
+
+/* PANES */
+.pane{
+  display:none;
+  padding:25px;
+}
+
+.pane.active{
+  display:block;
+}
+
+/* CARDS */
+.card{
+  background:#f9fafc;
+  padding:18px;
+  border-radius:10px;
+  margin-bottom:15px;
+  border-left:5px solid #0033A0;
+}
+
+/* FORM */
+select{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:6px;
+  border:1px solid #ddd;
+}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:14px;
+  background:#FFCC00;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  border-radius:8px;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:scale(1.02);
+}
+
+/* RESULT */
+.result{
+  margin-top:20px;
+  padding:20px;
+  text-align:center;
+  border-radius:10px;
+  background:#f4f6f9;
+}
+
+.big{
+  font-size:42px;
+  font-weight:700;
+}
+
+.badge{
+  margin-top:10px;
+  font-weight:600;
+  padding:8px;
+  border-radius:6px;
+  display:inline-block;
+}
+
+/* COLORS */
+.green{background:#d4edda;color:#155724;}
+.blue{background:#d1ecf1;color:#0c5460;}
+.orange{background:#fff3cd;color:#856404;}
+.gray{background:#e2e3e5;color:#383d41;}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+Sistema de Lead Score Consignado
+</div>
+
+<div class="container">
+
+<div class="tabs">
+  <div class="tab active" onclick="openTab(0)">Fluxo</div>
+  <div class="tab" onclick="openTab(1)">Score</div>
+  <div class="tab" onclick="openTab(2)">Calculadora</div>
+</div>
+
+<!-- FLUXO -->
+<div class="pane active">
+
+<div class="card"><b>1. Captação</b><br>Banco / Portal / Indicação</div>
+<div class="card"><b>2. Higienização</b><br>Remove duplicados e valida dados</div>
+<div class="card"><b>3. Filtros</b><br>Não BB, <6 meses, não CLT</div>
+<div class="card"><b>4. Score</b><br>Classificação automática</div>
+<div class="card"><b>5. Distribuição</b><br>Prioridade por score</div>
+<div class="card"><b>6. Contato</b><br>Simulação antes da ligação</div>
+
+</div>
+
+<!-- SCORE -->
+<div class="pane">
+
+<div class="card">
+<b>Critérios</b><br><br>
+Tempo empresa → 25<br>
+Renda → 25<br>
+Margem → 20<br>
+Situação → 15<br>
+Empresa → 10<br>
+Contrato → 5
+</div>
+
+<div class="card">
+<b>Classificação</b><br><br>
+A (80+) → Ligar agora<br>
+B → Hoje<br>
+C → Semana<br>
+D → Campanha
+</div>
+
+</div>
+
+<!-- CALCULADORA -->
+<div class="pane">
+
+<select id="c1">
+<option value="-1"><6 meses</option>
+<option value="5">6-12 meses</option>
+<option value="10">1-2 anos</option>
+<option value="18">2-5 anos</option>
+<option value="25">5+ anos</option>
+</select>
+
+<select id="c2">
+<option value="-1"><1400</option>
+<option value="8">1400-2000</option>
+<option value="15">2000-3500</option>
+<option value="20">3500-6000</option>
+<option value="25">6000+</option>
+</select>
+
+<select id="c3">
+<option value="-1">Sem margem</option>
+<option value="4">até 10%</option>
+<option value="10">10-20%</option>
+<option value="15">20-30%</option>
+<option value="20">livre</option>
+</select>
+
+<select id="c4">
+<option value="15">Negativado</option>
+<option value="10">Dívidas</option>
+<option value="5">Limpo</option>
+</select>
+
+<select id="c5">
+<option value="-1"><1 ano</option>
+<option value="3">1-2 anos</option>
+<option value="6">2-5 anos</option>
+<option value="8">5-10 anos</option>
+<option value="10">10+ anos</option>
+</select>
+
+<select id="c6">
+<option value="5">CLT indeterminado</option>
+<option value="2">CLT contrato</option>
+<option value="-1">Temporário</option>
+</select>
+
+<button onclick="calcular()">Calcular Score</button>
+
+<div class="result">
+<div id="score" class="big">-</div>
+<div id="scoreClass" class="badge"></div>
+<div id="desc"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function openTab(i){
+  document.querySelectorAll(".tab").forEach((t,index)=>{
+    t.classList.toggle("active",index===i)
+  })
+
+  document.querySelectorAll(".pane").forEach((p,index)=>{
+    p.classList.toggle("active",index===i)
+  })
+}
+
+function calcular(){
+
+  let valores=[
+    document.getElementById("c1").value,
+    document.getElementById("c2").value,
+    document.getElementById("c3").value,
+    document.getElementById("c4").value,
+    document.getElementById("c5").value,
+    document.getElementById("c6").value
+  ].map(Number)
+
+  if(valores.includes(-1)){
+    setResultado("X","ELIMINADO","Lead não elegível","gray")
+    return
+  }
+
+  let total=valores.reduce((a,b)=>a+b,0)
+
+  if(total>=80){
+    setResultado(total,"🔥 PRIORIDADE MÁXIMA","Ligar AGORA","green")
+  }
+  else if(total>=60){
+    setResultado(total,"🟡 ALTA","Ligar hoje","blue")
+  }
+  else if(total>=40){
+    setResultado(total,"🟠 MÉDIA","Trabalhar semana","orange")
+  }
+  else{
+    setResultado(total,"⚪ BAIXA","Campanha futura","gray")
+  }
+}
+
+function setResultado(score,classe,desc,cor){
+  document.getElementById("score").innerText=score
+  let badge=document.getElementById("scoreClass")
+  badge.innerText=classe
+  badge.className="badge "+cor
+  document.getElementById("desc").innerText=desc
+}
+
+</script>
+
+</body>
+</html>
