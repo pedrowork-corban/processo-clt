@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Score Consignado</title>
+
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f4f6f9;
+}
+
+.header{
+  background:#0033A0;
+  color:white;
+  padding:16px;
+  text-align:center;
+  font-weight:bold;
+  font-size:20px;
+}
+
+.tabs{
+  display:flex;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+}
+
+.tab{
+  flex:1;
+  padding:12px;
+  text-align:center;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.tab.active{
+  background:#FFCC00;
+}
+
+.pane{
+  display:none;
+  padding:20px;
+}
+
+.pane.active{
+  display:block;
+}
+
+.card{
+  background:#fff;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:12px;
+}
+
+select{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#FFCC00;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  border-radius:6px;
+}
+
+.result{
+  margin-top:20px;
+  padding:20px;
+  text-align:center;
+  background:#fff;
+  border-radius:8px;
+}
+
+.big{
+  font-size:40px;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+Sistema de Lead Score - Consignado CLT
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="openTab(0)">Fluxo</div>
+  <div class="tab" onclick="openTab(1)">Score</div>
+  <div class="tab" onclick="openTab(2)">Calculadora</div>
+</div>
+
+<!-- FLUXO -->
+<div class="pane active">
+
+<div class="card"><b>1. Captação</b><br>Banco / Portal / Indicação</div>
+
+<div class="card"><b>2. Higienização</b><br>Remove duplicados e valida dados</div>
+
+<div class="card"><b>3. Filtros</b><br>
+- Não BB → remove<br>
+- <6 meses → remove<br>
+- Não CLT → remove
+</div>
+
+<div class="card"><b>4. Score</b><br>Classifica A/B/C/D</div>
+
+<div class="card"><b>5. Distribuição</b><br>
+A → prioridade<br>
+B → equipe<br>
+C → rodízio<br>
+D → campanha
+</div>
+
+<div class="card"><b>6. Contato</b><br>Simulação antes da ligação</div>
+
+</div>
+
+<!-- SCORE -->
+<div class="pane">
+
+<div class="card">
+<b>Critérios:</b><br><br>
+Tempo empresa → 25<br>
+Renda → 25<br>
+Margem → 20<br>
+Situação → 15<br>
+Empresa → 10<br>
+Contrato → 5
+</div>
+
+<div class="card">
+<b>Classificação:</b><br><br>
+A = 80+<br>
+B = 60–79<br>
+C = 40–59<br>
+D = abaixo
+</div>
+
+</div>
+
+<!-- CALCULADORA -->
+<div class="pane">
+
+<select id="c1">
+<option value="-1"><6 meses</option>
+<option value="5">6-12 meses</option>
+<option value="10">1-2 anos</option>
+<option value="18">2-5 anos</option>
+<option value="25">5+ anos</option>
+</select>
+
+<select id="c2">
+<option value="-1"><1400</option>
+<option value="8">1400-2000</option>
+<option value="15">2000-3500</option>
+<option value="20">3500-6000</option>
+<option value="25">6000+</option>
+</select>
+
+<select id="c3">
+<option value="-1">Sem margem</option>
+<option value="4">até 10%</option>
+<option value="10">10-20%</option>
+<option value="15">20-30%</option>
+<option value="20">livre</option>
+</select>
+
+<select id="c4">
+<option value="15">Negativado</option>
+<option value="10">Dívidas</option>
+<option value="5">Limpo</option>
+</select>
+
+<select id="c5">
+<option value="-1"><1 ano</option>
+<option value="3">1-2 anos</option>
+<option value="6">2-5 anos</option>
+<option value="8">5-10 anos</option>
+<option value="10">10+ anos</option>
+</select>
+
+<select id="c6">
+<option value="5">CLT indeterminado</option>
+<option value="2">CLT contrato</option>
+<option value="-1">Temporário</option>
+</select>
+
+<button onclick="calcular()">Calcular Score</button>
+
+<div class="result">
+<div id="score" class="big">-</div>
+<div id="scoreClass"></div>
+<div id="desc"></div>
+</div>
+
+</div>
+
+<script>
+
+function openTab(i){
+  let tabs=document.querySelectorAll(".tab")
+  let panes=document.querySelectorAll(".pane")
+
+  tabs.forEach((t,index)=>{
+    t.classList.toggle("active",index===i)
+  })
+
+  panes.forEach((p,index)=>{
+    p.classList.toggle("active",index===i)
+  })
+}
+
+function calcular(){
+
+  let valores=[
+    document.getElementById("c1").value,
+    document.getElementById("c2").value,
+    document.getElementById("c3").value,
+    document.getElementById("c4").value,
+    document.getElementById("c5").value,
+    document.getElementById("c6").value
+  ].map(Number)
+
+  if(valores.includes(-1)){
+    document.getElementById("score").innerText="X"
+    document.getElementById("scoreClass").innerText="ELIMINADO"
+    document.getElementById("desc").innerText="Lead não elegível"
+    return
+  }
+
+  let total=valores.reduce((a,b)=>a+b,0)
+
+  document.getElementById("score").innerText=total
+
+  if(total>=80){
+    document.getElementById("scoreClass").innerText="🔥 PRIORIDADE MÁXIMA"
+    document.getElementById("desc").innerText="Ligar AGORA"
+  }
+  else if(total>=60){
+    document.getElementById("scoreClass").innerText="🟡 ALTA"
+    document.getElementById("desc").innerText="Ligar hoje"
+  }
+  else if(total>=40){
+    document.getElementById("scoreClass").innerText="🟠 MÉDIA"
+    document.getElementById("desc").innerText="Trabalhar semana"
+  }
+  else{
+    document.getElementById("scoreClass").innerText="⚪ BAIXA"
+    document.getElementById("desc").innerText="Campanha futura"
+  }
+
+}
+
+</script>
+
+</body>
+</html>
